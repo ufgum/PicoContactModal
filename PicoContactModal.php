@@ -55,6 +55,7 @@ final class PicoContactModal extends AbstractPicoPlugin
     private $myMailLineDescForEmail;
     private $myMailLineDescForMEssage;
     private $pluginPath;
+    private $pagetitle;
 
     /**
      * Triggered after Pico has loaded all available plugins
@@ -220,6 +221,7 @@ final class PicoContactModal extends AbstractPicoPlugin
     public function onMetaParsed(array &$meta)
     {
         // your code
+        $this->pagetitle =  $meta['title'];
     }
 
     /**
@@ -380,7 +382,7 @@ EOT;
                 $body = "$lineName $name \n\n$lineMail $email \n\n\n$lineComment\n$comments";
                 $headers = 'From: '.$senderName.' <' . $emailTo . '>' . "\r\n" . 'Reply-To: ' . $email;
 
-                mail($emailTo, $subject, $body, $headers);
+                if ( $this->pagetitle != "contactFormTest" ) mail($emailTo, $subject, $body, $headers);
             }
         }
     }
