@@ -56,5 +56,7 @@ Install
 
 5. Thats it, have fun    :)
 
+[see it in action](http://www.edor.de)
+
 ---
 hope you like this. if something goes wrong, ask me
