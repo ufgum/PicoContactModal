@@ -43,11 +43,16 @@ Install
                                       'MyMailLineDescForMEssage' => 'Comment:' ];
 
 ```
+
 3. uncomment bootstrap-alert in your index.html file within the themes/bootstrap/ folder, if not already uncommented
+```
     <script src="{{ theme_url }}/assets/js/bootstrap/alert.js"></script>
+```
     
 4. to call the contact form, just enclose the text or button or anything else between %contact_start% and %contact_end%, eg:
+```
 %contact_start%get in touch%contact_end%
+```
 
 5. Thats it, have fun    :)
 
