@@ -57,4 +57,4 @@ Install
 5. Thats it, have fun    :)
 
 ---
-hope you like this. if something goes wrong, ask me: mail at edor dot de
+hope you like this. if something goes wrong, ask me
