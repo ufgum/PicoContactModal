@@ -56,6 +56,7 @@ final class PicoContactModal extends AbstractPicoPlugin
     private $myMailLineDescForMEssage;
     private $pluginPath;
     private $pagetitle;
+    private $MinTimeInSecondsForHumanToWriteMessage;
 
     /**
      * Triggered after Pico has loaded all available plugins
@@ -106,6 +107,7 @@ final class PicoContactModal extends AbstractPicoPlugin
         $this->myMailLineDescForEmail = $config['PicoContactModal']['MyMailLineDescForEmail'];
         $this->myMailLineDescForMEssage = $config['PicoContactModal']['MyMailLineDescForMEssage'];
         $this->pluginPath = $config[ 'base_url' ]."plugins/PicoContactModal/";
+        $this->MinTimeInSecondsForHumanToWriteMessage = $config['PicoContactModal']['MinTimeInSecondsForHumanToWriteMessage'];
     }
 
     /**
@@ -305,6 +307,7 @@ final class PicoContactModal extends AbstractPicoPlugin
                         <textarea name="message" class="form-control" /></textarea>
                         </div>
                     </div>
+                    <p id="hidden"></p>
                     <input type="hidden" name="send" value="true">
                     <div class="form-group">
                         <div class="col-md-5 col-md-offset-3">
@@ -318,7 +321,7 @@ final class PicoContactModal extends AbstractPicoPlugin
     </div>
 </div>
 EOT;
-
+        
 
         $subject = $this->myMailSubject;
         $senderName = $this->myMailSomeSenderName;
@@ -327,10 +330,10 @@ EOT;
         $lineMail = $this->myMailLineDescForEmail;
         $lineComment = $this->myMailLineDescForMEssage;
         
-        // are you a stupid bot?
-        if ( isset( $_POST[ 'send' ] ) && !empty( $_POST[ 'name' ] ) ) {
-            die();
-        }
+           // are you a stupid bot?
+           if ( isset( $_POST[ 'send' ] ) && !empty( $_POST[ 'name' ] ) ) {
+              die();
+           }       
 
         //If the form is submitted
         if ( isset( $_POST[ 'yname' ] ) ) {
@@ -375,6 +378,26 @@ EOT;
             }
             else {
                 $name = trim( $_POST[ 'yname' ] );
+            }
+
+            
+           // bot ckeck
+           $jetzt = time ();
+           $form_start = $_POST['reference'];
+           $diff = $jetzt-$form_start;
+            
+            //Check to make sure that the form is opened by user action
+            if ( !$form_start ) {
+                $hasError = TRUE;
+                // somebody try to cheat
+                die();
+            }
+            
+            //Check to make sure that the time between opening the form and sending is respected
+            if ( $diff < $this->MinTimeInSecondsForHumanToWriteMessage ) {
+               $hasError = TRUE;
+               // somebody try to cheat
+               die();
             }
 
             //If there is no error, send the email
@@ -537,6 +560,8 @@ EOT;
 $(document).ready(function() {
     $('#contactModal').on('show.bs.modal', function() {
         $('#contactForm').bootstrapValidator('resetForm', true);
+        $("input[id='should']").remove();
+         insertInput(Math.round((new Date()).getTime()/1000));
     });
 
     $('#contactForm').bootstrapValidator({
@@ -604,6 +629,26 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+<script type="text/javascript">
+
+    hname="reference";
+
+    function insertInput(hvalue){
+        var para, hiddenInput, br;
+        para = document.getElementById('hidden');
+        hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = hname;
+        hiddenInput.id = 'should';
+        hiddenInput.value = hvalue;
+
+        para.appendChild(hiddenInput);
+        br = document.createElement('br'); //Not sure why you needed this <br> tag but here it is
+        para.appendChild(br);
+
+        return true; //Have this function return true if you want to post right away after adding the hidden value, otherwise leave it to false
+    }
 </script>
 </body>
 EOT;

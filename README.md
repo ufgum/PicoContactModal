@@ -41,7 +41,13 @@ Install
                                       'MyMailToAddress' => 'your@email.de',
                                       'MyMailLineDescForName' => 'Name:',
                                       'MyMailLineDescForEmail' => 'E-Mail:',
-                                      'MyMailLineDescForMEssage' => 'Comment:' ];
+                                      'MyMailLineDescForMEssage' => 'Comment:',
+                                      // instead of captcha, we use a  minimum time in seconds, which needs to pass between open
+                                      // the form and sending it. robots need a small time to do that. A human needs more time to fill in name, email and text,
+                                      // then send the form. If the time is less then in this option, the form will output a success message, but no
+                                      // mail got sent ;-)    The default value is 8 seconds, but can be adjusted.
+                                      'MinTimeInSecondsForHumanToWriteMessage'=> '8'
+                                       ];
 
 ```
 
